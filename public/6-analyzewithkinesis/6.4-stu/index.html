@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+<html lang="en" class="js csstransforms3d">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Hugo 0.144.0">
+    <meta name="description" content="">
+<meta name="author" content="namannguyenkhoa@gmail.com">
+
+    <link rel="icon" href="/images/favicon.png" type="image/png">
+
+    <title>6.4. Create Analytics Streaming Application Studio Notebook :: Optimizing Data Pipelines for Real-time Analysis and Transformation on AWS</title>
+
+    
+    <link href="/css/nucleus.css?1740910362" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1740910362" rel="stylesheet">
+    <link href="/css/hybrid.css?1740910362" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1740910362" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1740910362" rel="stylesheet">
+    <link href="/css/auto-complete.css?1740910362" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1740910362" rel="stylesheet">
+    <link href="/css/theme.css?1740910362" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1740910362" rel="stylesheet">
+    
+    <link href="/css/theme-workshop.css?1740910362" rel="stylesheet">
+    
+    
+
+    <script src="/js/jquery-3.3.1.min.js?1740910362"></script>
+
+    <style>
+      :root #header + #content > #left > #rlblock_left{
+          display:none !important;
+      }
+      
+    </style>
+    
+  </head>
+  <body class="" data-url="/6-analyzewithkinesis/6.4-stu/">
+    <nav id="sidebar" class="showVisitedLinks">
+
+
+
+  <div id="header-wrapper">
+    <div id="header">
+      <a id="logo" href="/">
+
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" width="30%"><defs><style>.cls-1{fill:#fff;}.cls-2{fill:#f90;fill-rule:evenodd;}</style></defs><title>AWS-Logo_White-Color</title><path class="cls-1" d="M14.09,10.85a4.7,4.7,0,0,0,.19,1.48,7.73,7.73,0,0,0,.54,1.19.77.77,0,0,1,.12.38.64.64,0,0,1-.32.49l-1,.7a.83.83,0,0,1-.44.15.69.69,0,0,1-.49-.23,3.8,3.8,0,0,1-.6-.77q-.25-.42-.51-1a6.14,6.14,0,0,1-4.89,2.3,4.54,4.54,0,0,1-3.32-1.19,4.27,4.27,0,0,1-1.22-3.2A4.28,4.28,0,0,1,3.61,7.75,6.06,6.06,0,0,1,7.69,6.46a12.47,12.47,0,0,1,1.76.13q.92.13,1.91.36V5.73a3.65,3.65,0,0,0-.79-2.66A3.81,3.81,0,0,0,7.86,2.3a7.71,7.71,0,0,0-1.79.22,12.78,12.78,0,0,0-1.79.57,4.55,4.55,0,0,1-.58.22l-.26,0q-.35,0-.35-.52V2a1.09,1.09,0,0,1,.12-.58,1.2,1.2,0,0,1,.47-.35A10.88,10.88,0,0,1,5.77.32,10.19,10.19,0,0,1,8.36,0a6,6,0,0,1,4.35,1.35,5.49,5.49,0,0,1,1.38,4.09ZM7.34,13.38a5.36,5.36,0,0,0,1.72-.31A3.63,3.63,0,0,0,10.63,12,2.62,2.62,0,0,0,11.19,11a5.63,5.63,0,0,0,.16-1.44v-.7a14.35,14.35,0,0,0-1.53-.28,12.37,12.37,0,0,0-1.56-.1,3.84,3.84,0,0,0-2.47.67A2.34,2.34,0,0,0,5,11a2.35,2.35,0,0,0,.61,1.76A2.4,2.4,0,0,0,7.34,13.38Zm13.35,1.8a1,1,0,0,1-.64-.16,1.3,1.3,0,0,1-.35-.65L15.81,1.51a3,3,0,0,1-.15-.67.36.36,0,0,1,.41-.41H17.7a1,1,0,0,1,.65.16,1.4,1.4,0,0,1,.33.65l2.79,11,2.59-11A1.17,1.17,0,0,1,24.39.6a1.1,1.1,0,0,1,.67-.16H26.4a1.1,1.1,0,0,1,.67.16,1.17,1.17,0,0,1,.32.65L30,12.39,32.88,1.25A1.39,1.39,0,0,1,33.22.6a1,1,0,0,1,.65-.16h1.54a.36.36,0,0,1,.41.41,1.36,1.36,0,0,1,0,.26,3.64,3.64,0,0,1-.12.41l-4,12.86a1.3,1.3,0,0,1-.35.65,1,1,0,0,1-.64.16H29.25a1,1,0,0,1-.67-.17,1.26,1.26,0,0,1-.32-.67L25.67,3.64,23.11,14.34a1.26,1.26,0,0,1-.32.67,1,1,0,0,1-.67.17Zm21.36.44a11.28,11.28,0,0,1-2.56-.29,7.44,7.44,0,0,1-1.92-.67,1,1,0,0,1-.61-.93v-.84q0-.52.38-.52a.9.9,0,0,1,.31.06l.42.17a8.77,8.77,0,0,0,1.83.58,9.78,9.78,0,0,0,2,.2,4.48,4.48,0,0,0,2.43-.55,1.76,1.76,0,0,0,.86-1.57,1.61,1.61,0,0,0-.45-1.16A4.29,4.29,0,0,0,43,9.22l-2.41-.76A5.15,5.15,0,0,1,38,6.78a3.94,3.94,0,0,1-.83-2.41,3.7,3.7,0,0,1,.45-1.85,4.47,4.47,0,0,1,1.19-1.37A5.27,5.27,0,0,1,40.51.29,7.4,7.4,0,0,1,42.6,0a8.87,8.87,0,0,1,1.12.07q.57.07,1.08.19t.95.26a4.27,4.27,0,0,1,.7.29,1.59,1.59,0,0,1,.49.41.94.94,0,0,1,.15.55v.79q0,.52-.38.52a1.76,1.76,0,0,1-.64-.2,7.74,7.74,0,0,0-3.2-.64,4.37,4.37,0,0,0-2.21.47,1.6,1.6,0,0,0-.79,1.48,1.58,1.58,0,0,0,.49,1.18,4.94,4.94,0,0,0,1.83.92L44.55,7a5.08,5.08,0,0,1,2.57,1.6A3.76,3.76,0,0,1,47.9,11a4.21,4.21,0,0,1-.44,1.93,4.4,4.4,0,0,1-1.21,1.47,5.43,5.43,0,0,1-1.85.93A8.25,8.25,0,0,1,42.05,15.62Z"></path><path class="cls-2" d="M45.19,23.81C39.72,27.85,31.78,30,25,30A36.64,36.64,0,0,1,.22,20.57c-.51-.46-.06-1.09.56-.74A49.78,49.78,0,0,0,25.53,26.4,49.23,49.23,0,0,0,44.4,22.53C45.32,22.14,46.1,23.14,45.19,23.81Z"></path><path class="cls-2" d="M47.47,21.21c-.7-.9-4.63-.42-6.39-.21-.53.06-.62-.4-.14-.74,3.13-2.2,8.27-1.57,8.86-.83s-.16,5.89-3.09,8.35c-.45.38-.88.18-.68-.32C46.69,25.8,48.17,22.11,47.47,21.21Z"></path></svg>
+
+</a>
+
+    </div>
+    
+        <div class="searchbox">
+    <label for="search-by"><i class="fas fa-search"></i></label>
+    <input data-search-input id="search-by" type="search" placeholder="Search...">
+    <span data-search-clear=""><i class="fas fa-times"></i></span>
+</div>
+
+<script type="text/javascript" src="/js/lunr.min.js?1740910362"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1740910362"></script>
+<script type="text/javascript">
+    
+        var baseurl = "http:\/\/Nam-An-work.github.io\/";
+    
+</script>
+<script type="text/javascript" src="/js/search.js?1740910362"></script>
+
+    
+  </div>
+
+    <div class="highlightable">
+    <ul class="topics">
+
+        
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-introduce/" title="1. Introduction" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/1-introduce/">
+          1. Introduction
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/2-ingestandstore/" title="2. Ingest and Store" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/2-ingestandstore/">
+          2. Ingest and Store
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/2-ingestandstore/2.1-s3/" title="2.1. Create S3 Bucket" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/2-ingestandstore/2.1-s3/">
+          2.1. Create S3 Bucket
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/2-ingestandstore/2.2-kn/" title="2.2. Create Data Firehose" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/2-ingestandstore/2.2-kn/">
+          2.2. Create Data Firehose
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/2-ingestandstore/2.3-dummy/" title="2.3. Generate Dummy Data" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/2-ingestandstore/2.3-dummy/">
+          2.3. Generate Dummy Data
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-catalogdata/" title="3. Catalog Data" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-catalogdata/">
+          3. Catalog Data
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-catalogdata/3.1-iam/" title="3.1. Create Iam role" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-catalogdata/3.1-iam/">
+          3.1. Create Iam role
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-catalogdata/3.2-glue/" title="3.2. Create AWS Glue Crawlers" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-catalogdata/3.2-glue/">
+          3.2. Create AWS Glue Crawlers
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-catalogdata/3.3-athena/" title="3.3. Query ingested data using Amazon Athena" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/3-catalogdata/3.3-athena/">
+          3.3. Query ingested data using Amazon Athena
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/4-datatransformation/" title="4. Data Transformation" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/4-datatransformation/">
+          4. Data Transformation
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/4-datatransformation/4.1-glue-inter/" title="4.1. Transform Data with AWS Glue (interactive sessions)" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/4-datatransformation/4.1-glue-inter/">
+          4.1. Transform Data with AWS Glue (interactive sessions)
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/4-datatransformation/4.2-glue-grap/" title="4.2. Transform Data with AWS Glue Studio (graphical interface)" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/4-datatransformation/4.2-glue-grap/">
+          4.2. Transform Data with AWS Glue Studio (graphical interface)
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/4-datatransformation/4.3-glue-data/" title="4.3. Transform Data with AWS Glue DataBrew" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/4-datatransformation/4.3-glue-data/">
+          4.3. Transform Data with AWS Glue DataBrew
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/4-datatransformation/4.4-emr/" title="4.4. Transform Data with EMR" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/4-datatransformation/4.4-emr/">
+          4.4. Transform Data with EMR
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-analyzewithathena/" title="5. Analyze with Athena" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/5-analyzewithathena/">
+          5. Analyze with Athena
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/6-analyzewithkinesis/" title="6. Analyze with Kinesis Data Analytics" class="dd-item 
+        parent
+        
+        
+        ">
+      <a href="/6-analyzewithkinesis/">
+          6. Analyze with Kinesis Data Analytics
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/6-analyzewithkinesis/6.1-iam/" title="6.1 Create Iam Role" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/6-analyzewithkinesis/6.1-iam/">
+          6.1 Create Iam Role
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/6-analyzewithkinesis/6.2-kin/" title="6.2. Create Kinesis Data Stream" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/6-analyzewithkinesis/6.2-kin/">
+          6.2. Create Kinesis Data Stream
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/6-analyzewithkinesis/6.3-glue/" title="6.3. Create Glue Catalog Table" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/6-analyzewithkinesis/6.3-glue/">
+          6.3. Create Glue Catalog Table
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/6-analyzewithkinesis/6.4-stu/" title="6.4. Create Analytics Streaming Application Studio Notebook" class="dd-item 
+        
+        active
+        
+        ">
+      <a href="/6-analyzewithkinesis/6.4-stu/">
+          6.4. Create Analytics Streaming Application Studio Notebook
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/7-quicksight/" title="7. Visualize in Quicksight" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/7-quicksight/">
+          7. Visualize in Quicksight
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/8-servewithlambda/" title="8. Serve with Lambda" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/8-servewithlambda/">
+          8. Serve with Lambda
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/9-warehouseonredshift/" title="9. Warehouse on Redshift" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/9-warehouseonredshift/">
+          9. Warehouse on Redshift
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/10-cleanup/" title="10. Clean up resources  " class="dd-item 
+        
+        
+        
+        ">
+      <a href="/10-cleanup/">
+          10. Clean up resources  
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+         
+    </ul>
+
+    
+    
+      <section id="shortcuts">
+        <h3>More</h3>
+        <ul>
+          
+              <li> 
+                  <a class="padding" href="https://aws.amazon.com/blogs"><i class='fab fa-aws'></i> AWS Study Group - Blog</a>
+              </li>
+          
+              <li> 
+                  <a class="padding" href="https://www.facebook.com/groups/awsstudygroupfcj"><i class='fab fa-facebook'></i> AWS Study Group - FB Group</a>
+              </li>
+          
+        </ul>
+      </section>
+    
+
+    
+    <section id="prefooter">
+      <hr/>
+      <ul>
+      
+        <li>
+          <a class="padding">
+            <i class="fas fa-language fa-fw"></i>
+          <div class="select-style">
+            <select id="select-language" onchange="location = this.value;">
+          
+          
+          
+              
+              
+                  
+                    
+                    
+                      <option id="en" value="http://Nam-An-work.github.io/6-analyzewithkinesis/6.4-stu/" selected>English</option>
+                    
+                  
+              
+                  
+              
+          
+              
+              
+                  
+              
+                  
+                    
+                    
+                      <option id="vi" value="http://Nam-An-work.github.io/vi/6-analyzewithkinesis/6.4-stu/">Tiếng Việt</option>
+                    
+                  
+              
+          
+        </select>
+        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+          width="255px" height="255px" viewBox="0 0 255 255" style="enable-background:new 0 0 255 255;" xml:space="preserve">
+          <g>
+            <g id="arrow-drop-down">
+              <polygon points="0,63.75 127.5,191.25 255,63.75 		" />
+            </g>
+          </g>
+        </svg>
+        </div>
+        </a>
+        </li>
+      
+      
+      
+        <li><a class="padding" href="#" data-clear-history-toggle=""><i class="fas fa-history fa-fw"></i> Clear History</a></li>
+      
+      </ul>
+    </section>
+    
+    <section id="footer">
+      <left>
+    
+     <b> Workshop</b> <br>
+    <img src="https://hitwebcounter.com/counter/counter.php?page=7920860&style=0038&nbdigits=9&type=page&initCount=0" title="Migrate" Alt="web counter"   border="0" /></a>  <br>
+     <b> <a href="https://cloudjourney.awsstudygroup.com/">Cloud Journey</a></b> <br>
+    <img src="https://hitwebcounter.com/counter/counter.php?page=7830807&style=0038&nbdigits=9&type=page&initCount=0" title="Total CLoud Journey" Alt="web counter"   border="0"   />
+     
+</left>
+<left>
+    <br>
+    <br>
+        <b> Last Updated </b> <br>
+        <i><font color=orange>18-04-2024</font></i>
+    </left>
+    <left>
+        <br>
+        <br>
+            <b> Team </b> <br>
+           
+            <i> <a href="https://www.linkedin.com/in/sutrinh/"  style="color:orange">Sử Trịnh  </a> <br>
+                <a href="https://www.linkedin.com/in/jotaguy"  style="color:orange">Gia Hưng </a> <br>
+                <a href="https://www.linkedin.com/in/hiepnguyendt"  style="color:orange">Thanh Hiệp </a>
+               
+        </i>
+        </left>
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+    </section>
+  </div>
+</nav>
+
+
+
+
+        <section id="body">
+        <div id="overlay"></div>
+        <div class="padding highlightable">
+              
+              <div>
+                <div id="top-bar">
+                
+                
+                <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                    <span id="sidebar-toggle-span">
+                        <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                          <i class="fas fa-bars"></i>
+                        </a>
+                    </span>
+                  
+                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
+                  
+                  <span class="links">
+                 
+                 
+                    
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            <a href='/'>Optimizing Data Pipelines for Real-time Analysis and Transformation on AWS</a> > <a href='/6-analyzewithkinesis/'>6. Analyze with Kinesis Data Analytics</a> > 6.4. Create Analytics Streaming Application Studio Notebook
+          
+        
+          
+        
+          
+        
+                 
+                  </span>
+                </div>
+                
+                    <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#create-analytics-streaming-application-studio-notebook">Create Analytics Streaming Application Studio Notebook</a></li>
+        <li><a href="#running-the-kinesis-analytics-studio-notebook">Running the Kinesis Analytics Studio Notebook</a></li>
+        <li><a href="#generate-dummy-data-to-kinesis-data-stream">Generate Dummy Data to Kinesis Data Stream</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </div>
+</div>
+
+                
+              </div>
+            </div>
+            
+        <div id="head-tags">
+        
+        </div>
+        
+        <div id="body-inner">
+          
+            <h1>
+              
+              6.4. Create Analytics Streaming Application Studio Notebook
+            </h1>
+          
+
+        
+
+
+
+	<h3 id="create-analytics-streaming-application-studio-notebook">Create Analytics Streaming Application Studio Notebook</h3>
+<p>Now let&rsquo;s create our Kinesis Analytics Streaming Application Studio Notebook. This Analytics application notebook can process streaming data from Kinesis Data Stream and we can write SQL analytical queries to get real-time insights such as current activity count or device temperature.</p>
+<ul>
+<li>Go to <a href="https://us-east-1.console.aws.amazon.com/kinesisanalytics/home?region=us-east-1#/list/notebooks">Managed Apache Flink</a></li>
+<li>Navigate to <strong>Studio</strong></li>
+<li>Click <strong>Create Studio notebook</strong></li>
+<li>Choose <strong>Create with custom settings</strong>
+<img src="/anworkshopaws/images/6-analyzewithkinesis/10.png" alt="pic">
+<strong>General</strong></li>
+<li>Enter Studio notebook name: <strong>AnalyticsWorkshop-KDANotebook</strong></li>
+<li>Enter Runtime: <strong>Apache Flink 1.15, Apache Zeppelin 0.10</strong></li>
+<li>Click Next
+<img src="/anworkshopaws/images/6-analyzewithkinesis/11.png" alt="pic">
+<strong>IAM role</strong></li>
+<li>Select <strong>Choose from IAM roles that Kinesis Data Analytics can assume</strong></li>
+<li>Select our previously created service role: <strong>AnalyticsworkshopKinesisAnalyticsRole</strong></li>
+<li>In AWS Glue database, select: <strong>analyticsworkshopdb</strong></li>
+<li>Click Next
+<img src="/anworkshopaws/images/6-analyzewithkinesis/12.png" alt="pic">
+<strong>In Configurations</strong></li>
+<li>Parallelism: 4</li>
+<li>Parallelism per KPU: 1</li>
+<li>Uncheck the Turn on logging checkbox</li>
+<li>Skip everything else and go to the bottom, in tag: workshop: AnalyticsOnAWS
+<img src="/anworkshopaws/images/6-analyzewithkinesis/13.png" alt="pic"></li>
+</ul>
+<h3 id="running-the-kinesis-analytics-studio-notebook">Running the Kinesis Analytics Studio Notebook</h3>
+<p>Now that we have created our notebook, we can run it and try to execute some SQL queries.</p>
+<ul>
+<li>See our list of notebooks in Studio tab and click our newly created notebook AnalyticsWorkshop-KDANotebook</li>
+<li>Click Run</li>
+<li>Wait until the Status goes into Running mode. (It will take about 5-7 minutes)
+<img src="/anworkshopaws/images/6-analyzewithkinesis/14.png" alt="pic"></li>
+<li>Click Open in Apache Zeppelin at the upper right hand side to open Zeppelin Notebook</li>
+<li>Click Create new note and give the note a name AnalyticsWorkshop-ZeppelinNote</li>
+<li>Paste this SQL query
+
+<div class="notices note" ><pre><code>  %flink.ssql(type=update)
+  SELECT * FROM raw_stream;
+</code></pre>
+</div>
+
+<img src="/anworkshopaws/images/6-analyzewithkinesis/15.png" alt="pic"></li>
+<li>Click Add Paragraph
+<img src="/anworkshopaws/images/6-analyzewithkinesis/16.png" alt="pic"></li>
+<li>Paste this SQL query
+
+<div class="notices note" ><pre><code>  %flink.ssql(type=update)
+  SELECT activity_type, count(*) as activity_cnt FROM raw_stream group by activity_type;
+</code></pre>
+</div>
+
+<img src="/anworkshopaws/images/6-analyzewithkinesis/17.1.png" alt="pic"></li>
+<li>When all queries are pasted, Click the Play button at the top right of the paragraph
+<img src="/anworkshopaws/images/6-analyzewithkinesis/18.png" alt="pic">
+NOTE: There will be no data shown yet because this Streaming Analytics notebook processes streaming data. We have to send streaming data from our Kinesis Data Generator (if not already), so the notebook can display the result of the queries</li>
+</ul>
+<h3 id="generate-dummy-data-to-kinesis-data-stream">Generate Dummy Data to Kinesis Data Stream</h3>
+<p>To display data from queries run in Analytics Streaming notebook, we have to send the raw data from our Kinesis Data Generator.</p>
+<ul>
+<li>Go to the KinesisDataGeneratorURL. You can find this in the <a href="https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/outputs?filteringStatus=active&amp;filteringText=&amp;viewNested=true&amp;hideStacks=false&amp;stackId=arn%3Aaws%3Acloudformation%3Aus-east-1%3A860873776111%3Astack%2FKinesis-Data-Generator-Cognito-User%2Fe8fc0040-b69e-11ec-bd11-0e017e3a47f9">Cloudformation stack&rsquo;s Output tab</a>.
+<img src="/anworkshopaws/images/6-analyzewithkinesis/19.png" alt="pic"></li>
+<li>Login with your username &amp; password
+<img src="/anworkshopaws/images/6-analyzewithkinesis/20.png" alt="pic">
+Fill this out:</li>
+<li>Region: us-east-1</li>
+<li>Stream/delivery stream: analytics-workshop-data-stream (DO NOT choose analytics-workshop-stream that you might have created in &ldquo;Ingest and Store&rdquo; module of this workshop)</li>
+<li>Ensure Records per second is Constant.</li>
+<li>Value for Records per second: 100 (DO NOT change this number for the workshop.)</li>
+<li>Ensure that Compress Records is unchecked.</li>
+<li>Record template (Template 1): In the big text area, insert the following json template:
+
+<div class="notices note" ><pre><code>     {
+     &quot;uuid&quot;: &quot;{{random.uuid}}&quot;,
+     &quot;device_ts&quot;: &quot;{{date.utc(&quot;YYYY-MM-DD HH:mm:ss.SSS&quot;)}}&quot;,
+     &quot;device_id&quot;: {{random.number(50)}},
+     &quot;device_temp&quot;: {{random.weightedArrayElement(
+        {&quot;weights&quot;:[0.30, 0.30, 0.20, 0.20],&quot;data&quot;:[32, 34, 28, 40]}
+     )}},
+     &quot;track_id&quot;: {{random.number(30)}},  
+     &quot;activity_type&quot;: {{random.weightedArrayElement(
+           {
+                 &quot;weights&quot;: [0.1, 0.2, 0.2, 0.3, 0.2],
+                 &quot;data&quot;: [&quot;\&quot;Running\&quot;&quot;, &quot;\&quot;Working\&quot;&quot;, &quot;\&quot;Walking\&quot;&quot;, &quot;\&quot;Traveling\&quot;&quot;, &quot;\&quot;Sitting\&quot;&quot;]
+           }
+        )}}
+     }
+</code></pre>
+</div>
+</li>
+<li>Then Click Send Data
+<img src="/anworkshopaws/images/6-analyzewithkinesis/21.png" alt="pic"></li>
+<li>Go back to our Zeppelin Notebook. Wait for a few minutes, the result should be displayed
+<img src="/anworkshopaws/images/6-analyzewithkinesis/22.png" alt="pic"></li>
+</ul>
+
+
+
+
+
+<footer class=" footline" >
+	
+</footer>
+
+        
+        </div> 
+        
+
+      </div>
+
+    <div id="navigation">
+        
+        
+        
+        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+        
+        
+
+
+	 
+	 
+		
+			<a class="nav nav-prev" href="/6-analyzewithkinesis/6.3-glue/" title="6.3. Create Glue Catalog Table"> <i class="fa fa-chevron-left"></i></a>
+		
+		
+			<a class="nav nav-next" href="/7-quicksight/" title="7. Visualize in Quicksight" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+	
+    </div>
+
+    </section>
+    
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="/js/clipboard.min.js?1740910362"></script>
+    <script src="/js/perfect-scrollbar.min.js?1740910362"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1740910362"></script>
+    <script src="/js/jquery.sticky.js?1740910362"></script>
+    <script src="/js/featherlight.min.js?1740910362"></script>
+    <script src="/js/highlight.pack.js?1740910362"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="/js/modernizr.custom-3.6.0.js?1740910362"></script>
+    <script src="/js/learn.js?1740910362"></script>
+    <script src="/js/hugo-learn.js?1740910362"></script>
+
+    <link href="/mermaid/mermaid.css?1740910362" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1740910362"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-158079754-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  </body>
+</html>
